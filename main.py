@@ -33,8 +33,12 @@ def parse_arguments():
     if args.url:
         parsed_urls = [args.url]
     elif args.input_file:
-        with open(args.input_file, 'r') as file:
-            parsed_urls = [line.strip() for line in file.readlines()]
+        try:
+            with open(args.input_file, 'r') as file:
+                parsed_urls = [line.strip() for line in file.readlines()]
+        except FileNotFoundError as e:
+            print(f"{e}")
+            quit()
     return parsed_urls
 
 

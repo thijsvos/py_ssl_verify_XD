@@ -21,7 +21,7 @@ options:
 
 ## Example
 ```
-python main.py -u https://example.com 
+$ python main.py -u https://example.com 
 [
     {
         "url": "https://example.com",
@@ -31,7 +31,7 @@ python main.py -u https://example.com
 ```
 
 ```
-cat henk.txt
+$ cat henk.txt
 https://expired.badssl.com/
 https://wrong.host.badssl.com/
 https://self-signed.badssl.com/
@@ -40,7 +40,7 @@ https://revoked.badssl.com/
 https://pinning-test.badssl.com/
 https://badssl.com/
 
-python main.py -f xd.txt 
+$ python main.py -f xd.txt 
 [
     {
         "url": "https://expired.badssl.com/",

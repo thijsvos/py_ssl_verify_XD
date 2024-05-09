@@ -31,7 +31,7 @@ $ python main.py -u https://example.com
 ```
 
 ```
-$ cat henk.txt
+$ cat xd.txt
 https://expired.badssl.com/
 https://wrong.host.badssl.com/
 https://self-signed.badssl.com/

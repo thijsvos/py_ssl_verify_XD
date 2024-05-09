@@ -31,6 +31,15 @@ python main.py -u https://example.com
 ```
 
 ```
+cat henk.txt
+https://expired.badssl.com/
+https://wrong.host.badssl.com/
+https://self-signed.badssl.com/
+https://untrusted-root.badssl.com/
+https://revoked.badssl.com/
+https://pinning-test.badssl.com/
+https://badssl.com/
+
 python main.py -f xd.txt 
 [
     {

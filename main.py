@@ -128,6 +128,7 @@ if __name__ == "__main__":
     urls = parse_arguments()
     if not urls:
         print("Your input did not have any URLs.")
+        quit()
     results = asyncio.run(main(urls))
     json_results = json.dumps(results, indent=4, ensure_ascii=False)
     print(json_results)

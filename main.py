@@ -60,7 +60,6 @@ async def check_ssl_cert(url: str):
 
             return {"url": url, "status": "valid"}
 
-
     except httpx.HTTPStatusError as e:
         return {"url": url, "status": f"error: {str(e)}"}
     except httpx.ConnectError as e:
@@ -127,6 +126,8 @@ def parse_arguments():
 
 if __name__ == "__main__":
     urls = parse_arguments()
+    if not urls:
+        print("Your input did not have any URLs.")
     results = asyncio.run(main(urls))
     json_results = json.dumps(results, indent=4, ensure_ascii=False)
     print(json_results)

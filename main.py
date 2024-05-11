@@ -26,10 +26,7 @@ async def check_ssl_cert(url: str):
     """
     try:
         async with httpx.AsyncClient() as client:
-            response = await client.get(url)
-            # If there is a redirect, then don't return anything and leave the certificate status NULL in the DB.
-            if response.status_code != 200:
-                return {"url": url}
+            await client.get(url)
 
             return {"url": url, "status": "valid"}
 
@@ -59,7 +56,7 @@ async def main(urls):
     Raises:
     - Exception: Any exception raised by the `check_ssl_cert` function will propagate through this function.
     """
-    return await asyncio.gather(*(check_ssl_cert(url) for url in urls))
+    return await asyncio.gather(*(check_ssl_cert(url) for url in urls if url.startswith("https://")))
 
 
 def parse_arguments():

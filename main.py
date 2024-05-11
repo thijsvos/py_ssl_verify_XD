@@ -27,14 +27,19 @@ async def check_ssl_cert(url: str):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url)
-            if response.status_code == 200:
-                return {"url": url, "status": "valid"}
+            # If there is a redirect, then don't return anything and leave the certificate status NULL in the DB.
+            if response.status_code != 200:
+                return {"url": url}
+
+            return {"url": url, "status": "valid"}
 
     except httpx.HTTPStatusError as e:
         return {"url": url, "status": f"error: {str(e)}"}
     except httpx.ConnectError as e:
         return {"url": url, "status": f"error: {str(e)}"}
     except ssl.SSLCertVerificationError as e:
+        return {"url": url, "status": f"error: {str(e)}"}
+    except ssl.SSLError as e:
         return {"url": url, "status": f"error: {str(e)}"}
 
 

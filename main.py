@@ -5,30 +5,61 @@ import ssl
 import argparse
 
 
+def is_redirect(response_code: int) -> bool:
+    # https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections
+    match response_code:
+        # Permanent Redirections
+        case 301:  # Moved Permanently
+            return True
+        case 308:  # Permanent Redirect
+            return True
+        # Temporary Redirections
+        case 302:  # Moved Permanently
+            return True
+        case 303:  # Permanent Redirect
+            return True
+        case 307:  # Moved Permanently
+            return True
+        # Special Redirections
+        case 300:  # Permanent Redirect
+            return True
+        case 304:  # Moved Permanently
+            return True
+        case _:
+            return False
+
+
 async def check_ssl_cert(url: str):
     """
-    This function asynchronously checks the SSL certificate of a given URL using the httpx library.
-    It attempts to establish a connection to the URL and verifies the SSL certificate. If the connection is successful and the SSL certificate is valid,
-    it returns a dictionary indicating the URL is valid. If there is an HTTP status error, a connection error, or an SSL certificate verification error,
+    Asynchronously checks the SSL certificate of a given URL using the httpx library.
+    Attempts to establish a connection to the URL and verifies the SSL certificate.
+    If the connection is successful and the SSL certificate is valid, returns a dictionary indicating the URL is valid.
+    If there is an HTTP status error, a connection error, or an SSL certificate verification error,
     it catches these exceptions and returns a dictionary indicating the type of error encountered.
 
     Parameters:
     - url (str): The URL to check the SSL certificate for.
 
     Returns:
-    - dict: A dictionary containing the URL and the status of the SSL certificate check. The status will be either "valid" if the SSL certificate is valid,
-              or an error message indicating the type of error encountered.
+    - dict: A dictionary containing the URL and the status of the SSL certificate check.
+             The status will be either "valid" if the SSL certificate is valid,
+             or an error message indicating the type of error encountered.
 
     Raises:
     - httpx.HTTPStatusError: Raised if there is an HTTP status error during the request.
     - httpx.ConnectError: Raised if there is a connection error during the request.
     - ssl.SSLCertVerificationError: Raised if there is an SSL certificate verification error.
+    - ssl.SSLError: Raised if there is an SSL error during the request.
     """
     try:
         async with httpx.AsyncClient() as client:
-            await client.get(url)
+            response = await client.get(url)
+
+            if is_redirect(response.status_code):
+                return {"url": url, "status": "is_redirect"}
 
             return {"url": url, "status": "valid"}
+
 
     except httpx.HTTPStatusError as e:
         return {"url": url, "status": f"error: {str(e)}"}

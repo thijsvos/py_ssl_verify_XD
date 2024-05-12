@@ -68,6 +68,8 @@ async def check_ssl_cert(url: str):
         return {"url": url, "status": f"error: {str(e)}"}
     except ssl.SSLError as e:
         return {"url": url, "status": f"error: {str(e)}"}
+    except httpx.ConnectTimeout as e:
+        return {"url": url, "status": f"error: {str(e)}"}
 
 
 async def main(urls):
